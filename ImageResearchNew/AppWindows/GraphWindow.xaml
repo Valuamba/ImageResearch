@@ -1,0 +1,49 @@
+﻿<Window x:Class="ImageResearchNew.AppWindows.GraphWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageResearchNew.AppWindows"
+        xmlns:dvc="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+        mc:Ignorable="d"
+        Style="{StaticResource CustomWindow}"
+        Title="График пикселей" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Window.Resources>
+        <DataTemplate x:Key="ButtonDataTemplate">
+            <Button AutomationProperties.AutomationId="{Binding Path=Name, StringFormat='{}{0}Button'}" Foreground="White" Content="{Binding Name}" Width="50" Height="30" FontWeight="Bold" Click="Button_Click">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
+                                <Setter Property="Background" Value="Green" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=IsSelected}" Value="False">
+                                <Setter Property="Background" Value="Red" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <WindowsFormsHost Grid.Row="0" AutomationProperties.AutomationId="GraphChart">
+            <dvc:Chart x:Name="Chart" GetToolTipText="Chart_GetToolTipText"/>
+        </WindowsFormsHost>
+
+        <ItemsControl AutomationProperties.AutomationId="ButtonsItemsControl" HorizontalAlignment="Center" Grid.Row="2" ItemsSource="{Binding Buttons}" Margin="2" ItemTemplate="{StaticResource ButtonDataTemplate}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
+</Window>

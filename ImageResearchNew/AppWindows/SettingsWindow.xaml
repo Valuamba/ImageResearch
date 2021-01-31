@@ -1,0 +1,50 @@
+﻿<Window x:Class="ImageResearchNew.AppWindows.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ImageResearchNew.AppWindows"
+        mc:Ignorable="d"
+        Style="{StaticResource CustomWindow}"
+        Title="Настройки" SizeToContent="Height" ResizeMode="NoResize" Width="400">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="5" />
+            <RowDefinition Height="25" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Фон" Style="{StaticResource CustomTextBlock}" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Цвет текста" Style="{StaticResource CustomTextBlock}" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Шрифт" Style="{StaticResource CustomTextBlock}" />
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="Размер текста" Style="{StaticResource CustomTextBlock}" />
+        <TextBlock Grid.Row="8" Grid.Column="0" Text="Размер сетки" Style="{StaticResource CustomTextBlock}" />
+
+        <TextBox Grid.Row="0" Grid.Column="2" Text="{Binding Path=Background}" IsReadOnly="True" AutomationProperties.AutomationId="BackgroundTextBox" />
+        <Button Grid.Row="0" Grid.Column="4" Width="30" Content="..." x:Name="ColorButton" AutomationProperties.AutomationId="BackgroundButton" Click="ColorButton_Click" />
+
+        <TextBox Grid.Row="2" Grid.Column="2" Text="{Binding Path=Foreground}" IsReadOnly="True" AutomationProperties.AutomationId="ForegroundTextBox" />
+        <Button Grid.Row="2" Grid.Column="4" Width="30" Content="..." x:Name="ForegroundButton" AutomationProperties.AutomationId="ForegroundButton" Click="ForegroundButton_Click" />
+
+        <TextBox Grid.Row="4" Grid.Column="2" Text="{Binding Path=Font}" IsReadOnly="True" AutomationProperties.AutomationId="FontTextBox" />
+        <Button Grid.Row="4" Grid.Column="4" Width="30" Content="..." x:Name="FontButton"  AutomationProperties.AutomationId="FontButton" Click="FontButton_Click" />
+
+        <TextBox Grid.Row="6" Grid.Column="2" Width="60" HorizontalAlignment="Left" Text="{Binding Path=FontSize, StringFormat=N0}" IsReadOnly="True" AutomationProperties.AutomationId="FontSizeTextBox"/>
+
+        <TextBox Grid.Row="8" Grid.Column="2" Width="60" HorizontalAlignment="Left" Text="{Binding Path=GridSize}" AutomationProperties.AutomationId="GridSizeTextBox"/>
+    </Grid>
+</Window>

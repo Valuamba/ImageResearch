@@ -1,0 +1,31 @@
+﻿<Application x:Class="ImageResearchNew.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ImageResearchNew"
+             xmlns:classes="clr-namespace:ImageResearchNew.Classes"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <classes:Settings x:Key="Settings" />
+            
+            <Style x:Key="CustomWindow" TargetType="{x:Type Window}">
+                <Setter Property="Background" Value="{Binding Source={x:Static classes:Settings.Instance}, Path=Background}" />
+                <Setter Property="FontFamily" Value="{Binding Source={x:Static classes:Settings.Instance}, Path=Font}" />
+                <Setter Property="FontSize" Value="{Binding Source={x:Static classes:Settings.Instance}, Path=FontSize}" />
+            </Style>
+
+            <Style TargetType="{x:Type TextBlock}" x:Key="CustomTextBlock">
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="Foreground" Value="{Binding Source={x:Static classes:Settings.Instance}, Path=Foreground}" />
+            </Style>
+
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+
+            <Style TargetType="{x:Type ComboBox}">
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
