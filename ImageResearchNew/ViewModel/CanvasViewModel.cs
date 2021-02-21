@@ -15,6 +15,8 @@ namespace ImageResearchNew.ViewModel
         private ToolboxViewModel _toolbox = null;
 
         private EditedImage editedImage = null;
+        private double width;
+        private double height;
 
         public EditedImage EditedImage
         {
@@ -22,6 +24,26 @@ namespace ImageResearchNew.ViewModel
             private set
             {
                 editedImage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Width
+        {
+            get => (int) width;
+            set
+            {
+                width = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public double Height
+        {
+            get => (int) height;
+            set
+            {
+                height = value;
                 OnPropertyChanged();
             }
         }
@@ -35,6 +57,8 @@ namespace ImageResearchNew.ViewModel
         public CanvasViewModel(EditedImage editedImage)
         {
             EditedImage = editedImage;
+            width = editedImage.Width;
+            height = editedImage.Height;
         }
 
         public void OnMouseDown(object sender, MouseButtonEventArgs e, Point position)
@@ -58,6 +82,14 @@ namespace ImageResearchNew.ViewModel
             if (_toolbox != null && _toolbox.CurrentTool != null)
             {
                 _toolbox.CurrentTool.OnMouseMove(this, e, position);
+            }
+        }
+
+        public void OnMouseEnter(object sender, MouseEventArgs e, Point position)
+        {
+            if (_toolbox != null && _toolbox.CurrentTool != null)
+            {
+                _toolbox.CurrentTool.OnMouseEnter(this, e, position);
             }
         }
     }

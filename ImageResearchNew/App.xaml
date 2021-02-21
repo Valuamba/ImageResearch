@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ImageResearchNew"
              xmlns:classes="clr-namespace:ImageResearchNew.Classes"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -26,6 +27,7 @@
             <Style TargetType="{x:Type ComboBox}">
                 <Setter Property="VerticalContentAlignment" Value="Center" />
             </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

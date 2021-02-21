@@ -16,7 +16,8 @@ namespace ImageResearchNew.ViewModel
         {
             new FreeHandTool(),
             new RegionsTool(),
-            new RegionTool()
+            new RegionTool(),
+            new ContiguityTool()
         };
 
         public ObservableCollection<ICanvasCallback> Tools

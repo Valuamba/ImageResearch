@@ -63,6 +63,9 @@
     <Compile Include="AppWindows\GraphWindow.xaml.cs">
       <DependentUpon>GraphWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AppWindows\ImageViewWindow.xaml.cs">
+      <DependentUpon>ImageViewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AppWindows\PixelsWindow.xaml.cs">
       <DependentUpon>PixelsWindow.xaml</DependentUpon>
     </Compile>
@@ -91,11 +94,17 @@
     <Compile Include="Model\EditedImage.cs" />
     <Compile Include="Model\ImageLayer.cs" />
     <Compile Include="Tools\AbstractInfoTool.cs" />
+    <Compile Include="Tools\ContiguityTool.cs" />
     <Compile Include="Tools\FreeHandTool.cs" />
     <Compile Include="Tools\RectangleTool.cs" />
     <Compile Include="Tools\RegionsTool.cs" />
     <Compile Include="Tools\RegionTool.cs" />
     <Compile Include="Tools\StandartTool.cs" />
+    <Compile Include="ViewImageTools\AbstractInfoViewTool.cs" />
+    <Compile Include="ViewImageTools\CompareViewTool.cs" />
+    <Compile Include="ViewImageTools\IViewCallback.cs" />
+    <Compile Include="ViewImageTools\RotationIncreaseViewTool.cs" />
+    <Compile Include="ViewImageTools\SingleViewTool.cs" />
     <Compile Include="ViewModel\CanvasViewModel.cs" />
     <Compile Include="ViewModel\ControllerViewModel.cs" />
     <Compile Include="ViewModel\DelegateCommand.cs" />
@@ -114,6 +123,10 @@
       <DependentUpon>ToolboxView.xaml</DependentUpon>
     </Compile>
     <Page Include="AppWindows\GraphWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AppWindows\ImageViewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -188,5 +201,6 @@
   <ItemGroup>
     <Resource Include="Images\click.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

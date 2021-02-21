@@ -46,5 +46,12 @@ namespace ImageResearchNew.View
 
             viewModel?.OnMouseUp(this, e, e.GetPosition(EditedImage));
         }
+
+        private void EditedImage_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var viewModel = DataContext as CanvasViewModel;
+
+            viewModel?.OnMouseEnter(this, e, e.GetPosition(EditedImage));
+        }
     }
 }

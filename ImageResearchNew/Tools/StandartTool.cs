@@ -54,5 +54,9 @@ namespace ImageResearchNew.Tools
         }
 
         protected abstract void DrawMethod(DrawingContext context, Point start, Point end, Brush brush, Pen pen);
+
+        public void OnMouseEnter(CanvasViewModel sender, MouseEventArgs e, Point position)
+        {
+        }
     }
 }

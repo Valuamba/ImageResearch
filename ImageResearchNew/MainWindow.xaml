@@ -6,13 +6,18 @@
         xmlns:vs="clr-namespace:ImageResearchNew.View"
         xmlns:vms="clr-namespace:ImageResearchNew.ViewModel"
         xmlns:local="clr-namespace:ImageResearchNew"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Style="{StaticResource CustomWindow}"
-        Title="Анализ изображений" Height="450" Width="800" WindowState="Maximized">
+        Title="Анализ изображений"
+        Height="450"
+        Width="800"
+        WindowState="Maximized">
+
     <Window.DataContext>
-        <vms:ControllerViewModel/>
+        <vms:ControllerViewModel />
     </Window.DataContext>
- 
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
@@ -20,15 +25,28 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Menu Grid.Row="0" AutomationProperties.AutomationId="MainMenu">
-            <MenuItem Header="Файл" AutomationProperties.AutomationId="FileMenuItem">
-                <MenuItem Header="Открыть" Command="{Binding OpenImageCommand}" AutomationProperties.AutomationId="OpenImageMenuItem" />
+        <Menu Grid.Row="0"
+              AutomationProperties.AutomationId="MainMenu">
+            <MenuItem Header="Файл"
+                      AutomationProperties.AutomationId="FileMenuItem">
+                <MenuItem Header="Открыть"
+                          Command="{Binding OpenImageCommand}"
+                          AutomationProperties.AutomationId="OpenImageMenuItem" />
                 <Separator />
-                <MenuItem Header="Настройки" AutomationProperties.AutomationId="SettingsMenuItem" Click="Settings_ClickMenuItem" />
+                <MenuItem Header="Настройки"
+                          AutomationProperties.AutomationId="SettingsMenuItem"
+                          Click="Settings_ClickMenuItem" />
             </MenuItem>
-            <MenuItem Header="Редактировать" AutomationProperties.AutomationId="EditMenuItem">
-                <MenuItem Header="Сетка" Command="{Binding ShowGridCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}" AutomationProperties.AutomationId="GridMenuItem" IsCheckable="True" IsChecked="{Binding Path=IsShowGrid}" />
-                <MenuItem Header="Информация о блоках" Command="{Binding ToolSummaryResult}" />
+            <MenuItem Header="Редактировать"
+                      AutomationProperties.AutomationId="EditMenuItem">
+                <MenuItem Header="Сетка"
+                          Command="{Binding ShowGridCommand}"
+                          CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=IsChecked}"
+                          AutomationProperties.AutomationId="GridMenuItem"
+                          IsCheckable="True"
+                          IsChecked="{Binding Path=IsShowGrid}" />
+                <MenuItem Header="Информация о блоках"
+                          Command="{Binding ToolSummaryResult}" />
             </MenuItem>
         </Menu>
 
@@ -39,17 +57,79 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <vs:ToolboxView Grid.Column="0" DataContext="{Binding Path=ToolBox}" AutomationProperties.AutomationId="ToolUserControl"/>
+            <vs:ToolboxView Grid.Column="0"
+                            DataContext="{Binding Path=ToolBox}"
+                            AutomationProperties.AutomationId="ToolUserControl" />
 
-            <Grid Grid.Column="2" Margin="10,0,10,10">
+            <Grid Grid.Column="2"
+                  Margin="10,0,10,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                     <RowDefinition Height="5" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <vs:CanvasView Grid.Row="0" DataContext="{Binding Path=Canvas}" AutomationProperties.AutomationId="CanvasUserControl" />
-                <vs:ProcessorsView Grid.Row="2" AutomationProperties.AutomationId="ProcessorsUserControl" />
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal">
+                    <vs:CanvasView  DataContext="{Binding Path=Canvas}"
+                                    AutomationProperties.AutomationId="CanvasUserControl" />
+                    <StackPanel Width="30"
+                                VerticalAlignment="Center">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type Button}">
+                                <Setter Property="Margin"
+                                        Value="2,0,2,10" />
+                            </Style>
+                        </StackPanel.Resources>
+                        <Button Content="1|2" />
+                        <Button Content="1" />
+                        <Button Content="2" />
+                    </StackPanel>
+                    
+                    <vs:CanvasView  DataContext="{Binding Path=Canvas}"
+                                    AutomationProperties.AutomationId="CanvasUserControl" />
+                </StackPanel>
+                
+                <vs:ProcessorsView Grid.Row="2"
+                                   AutomationProperties.AutomationId="ProcessorsUserControl" />
+
+                <StackPanel Grid.Row="3">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="100" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Scale"
+                                   Grid.Column="0"
+                                   Style="{StaticResource CustomTextBlock}" />
+                        <Slider Grid.Column="2"
+                                Minimum="0"
+                                Maximum="10000000"
+                                x:Name="scaleSlider"
+                                TickFrequency="10000"
+                                TickPlacement="BottomRight"
+                                IsSnapToTickEnabled="True"
+                                Value="{Binding ScaleValue, NotifyOnTargetUpdated=True}"
+                                AutomationProperties.AutomationId="imageScale"
+                                >
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.ScaleValueChanged}"
+                                                           CommandParameter="{Binding}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </Slider>
+                        <TextBlock Grid.Column="4"
+                                   Text="{Binding Path=Value, ElementName=scaleSlider}"
+                                   HorizontalAlignment="Right"
+                                   Style="{StaticResource CustomTextBlock}" />
+                    </Grid>
+                </StackPanel>
             </Grid>
         </Grid>
     </Grid>

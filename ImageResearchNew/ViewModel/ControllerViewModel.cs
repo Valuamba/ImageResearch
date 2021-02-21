@@ -19,6 +19,19 @@ namespace ImageResearchNew.ViewModel
         private CanvasViewModel _canvas;
         private ToolboxViewModel _toolBox;
 
+        public int ScaleValue
+        {
+            get => Canvas != null
+                ? (int) (Canvas.Width * Canvas.Height)
+                : 0;
+            set
+            {
+                Canvas.Height = Math.Sqrt((double)(value * 0.75));
+                Canvas.Width = Math.Sqrt((double)(value * 1.33));
+                OnPropertyChanged();
+            }
+        }
+
         public CanvasViewModel Canvas
         {
             get { return _canvas; }
@@ -58,6 +71,7 @@ namespace ImageResearchNew.ViewModel
         public DelegateCommand OpenImageCommand { get; }
         public DelegateCommand SelectedItemToolChanged { get; }
         public DelegateCommand ToolSummaryResult { get; }
+        public DelegateCommand ScaleValueChanged { get; }
 
         public ToolboxViewModel ToolBox
         {
@@ -95,6 +109,7 @@ namespace ImageResearchNew.ViewModel
             OpenImageCommand = new DelegateCommand(obj => OpenImage());
             SelectedItemToolChanged = new DelegateCommand(obj => OnSelectedItemToolChanged(obj));
             ToolSummaryResult = new DelegateCommand(obj => SummaryResult(), obj => Canvas != null);
+            ScaleValueChanged = new DelegateCommand(obj => OnScaleValueChanged(obj), obj => Canvas != null);
 
             Settings.Instance.PropertyChanged += Instance_PropertyChanged;
 
@@ -122,6 +137,23 @@ namespace ImageResearchNew.ViewModel
             {
                 tool.ShowResult(Canvas);
             }
+        }
+
+        private int delta = 0;
+        private void OnScaleValueChanged(object obj)
+        {
+            //if (delta < _scaleValue)
+            //{
+            //    Canvas.Width++;
+            //    Canvas.Height++;
+            //}
+            //else
+            //{
+            //    Canvas.Width--;
+            //    Canvas.Height--;
+            //}
+            //delta = _scaleValue;
+
         }
 
         private void OnSelectedItemToolChanged(object obj)
@@ -153,10 +185,10 @@ namespace ImageResearchNew.ViewModel
                 };
 
                 Canvas = canvas;
-
                 Canvas.EditedImage.AddLayer("Grid");
                 CreateGridImage();
                 Canvas.EditedImage.CurrentLayer.Visible = IsShowGrid;
+                OnPropertyChanged(nameof(ControllerViewModel.ScaleValue));
             }
         }
 
@@ -169,7 +201,7 @@ namespace ImageResearchNew.ViewModel
         {
             var state = (bool)obj;
 
-            if (state )
+            if (state)
             {
                 var layer = Canvas.EditedImage.Layers.FirstOrDefault(s => s.Name == "Grid");
 

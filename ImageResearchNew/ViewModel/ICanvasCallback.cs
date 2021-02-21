@@ -15,5 +15,7 @@ namespace ImageResearchNew.ViewModel
         void OnMouseUp(CanvasViewModel sender, MouseButtonEventArgs e, Point position);
 
         void OnMouseMove(CanvasViewModel sender, MouseEventArgs e, Point position);
+
+        void OnMouseEnter(CanvasViewModel sender, MouseEventArgs e, Point position);
     }
 }

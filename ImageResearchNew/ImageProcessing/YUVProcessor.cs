@@ -13,7 +13,7 @@ namespace ImageResearchNew.ImageProcessing
 
         public override void Process(EditedImage image)
         {
-            //throw new NotImplementedException();
+            //image.Image.
         }
     }
 }

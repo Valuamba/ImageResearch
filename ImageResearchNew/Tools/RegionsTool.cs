@@ -136,5 +136,9 @@ namespace ImageResearchNew.Tools
 
             return rect;
         }
+
+        public void OnMouseEnter(CanvasViewModel sender, MouseEventArgs e, Point position)
+        {
+        }
     }
 }
