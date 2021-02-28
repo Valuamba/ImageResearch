@@ -12,9 +12,7 @@
              BorderBrush="LightGray">
 
     <Grid Background="White">
-        <ScrollViewer Width="768"
-                      Height="576"
-                      VerticalScrollBarVisibility="Auto"
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
             <Image AutomationProperties.AutomationId="CanvasImage"
                    Name="EditedImage"
@@ -27,7 +25,7 @@
                    MouseDown="EditedImage_MouseDown"
                    MouseMove="EditedImage_MouseMove"
                    MouseUp="EditedImage_MouseUp"
-                   MouseEnter="EditedImage_MouseEnter"/>
+                   MouseEnter="EditedImage_MouseEnter" />
         </ScrollViewer>
     </Grid>
 

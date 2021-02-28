@@ -23,6 +23,12 @@ namespace ImageResearchNew.Model
         private int _height = 10;
         private int _layerIndex = 0;
 
+        private string _name;
+        public string Name
+        {
+            get => _name;
+        }
+
         public Bitmap SourceImage { get { return _sourceImage; } }
 
         public BitmapSource Image
@@ -79,9 +85,10 @@ namespace ImageResearchNew.Model
 
         //public int DpiY { get { return (int)_sourceImage.VerticalResolution; } }
 
-        public EditedImage(Bitmap sourceImage)
+        public EditedImage(Bitmap sourceImage, string name)
         {
             _sourceImage = sourceImage;
+            _name = name;
         }
 
         public void AddLayer()

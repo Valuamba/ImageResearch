@@ -1,7 +1,10 @@
-﻿using ImageResearchNew.Classes;
+﻿using Ikc5.TypeLibrary;
+using ImageResearchNew.AppWindows;
+using ImageResearchNew.Classes;
 using ImageResearchNew.Helpers;
 using ImageResearchNew.ImageProcessing;
 using ImageResearchNew.Model;
+using ImageResearchNew.ViewImageTools;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,33 +16,70 @@ using System.Threading.Tasks;
 
 namespace ImageResearchNew.ViewModel
 {
-    public class ControllerViewModel : BindableObjectBase
+    public class ControllerViewModel : BaseNotifyPropertyChanged
     {
         private bool _isShowGrid;
         private CanvasViewModel _canvas;
         private ToolboxViewModel _toolBox;
 
+        private ObservableCollection<CanvasViewModel> canvasList = new ObservableCollection<CanvasViewModel>();
+        private ObservableCollection<ICellViewModel> selectedImagesViews;
+        private ObservableCollection<ObservableCollection<CanvasViewModel>> _gridCanvasList;
+
+        public ObservableCollection<CanvasViewModel> CanvasList { get => canvasList; }
+
+        public ObservableCollection<ICellViewModel> SelectedImagesViews
+        {
+            get => selectedImagesViews;
+            set { SetProperty(ref selectedImagesViews, value);  }
+        }
+
+        public ObservableCollection<ObservableCollection<CanvasViewModel>> GridCanvasList
+        {
+            get => _gridCanvasList;
+            set => SetProperty(ref _gridCanvasList, value);
+        }
+
         public int ScaleValue
         {
-            get => Canvas != null
-                ? (int) (Canvas.Width * Canvas.Height)
+            get => FocusedCanvas != null
+                ? (int) (FocusedCanvas.Width * FocusedCanvas.Height)
                 : 0;
             set
             {
-                Canvas.Height = Math.Sqrt((double)(value * 0.75));
-                Canvas.Width = Math.Sqrt((double)(value * 1.33));
+                FocusedCanvas.Height = Math.Sqrt((double)(value * 0.75));
+                FocusedCanvas.Width = Math.Sqrt((double)(value * 1.33));
                 OnPropertyChanged();
             }
         }
 
-        public CanvasViewModel Canvas
+        public ToolboxViewModel ToolBox
+        {
+            get => _toolBox;
+            set => SetProperty(ref _toolBox, value);
+        }
+
+        public bool IsShowGrid
+        {
+            get => _isShowGrid;
+            set => SetProperty(ref _isShowGrid, value);
+        }
+
+        public CanvasViewModel FocusedCanvas
         {
             get { return _canvas; }
-            set
-            {
-                _canvas = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _canvas, value);
+        }
+
+        private ObservableCollection<AbstractInfoViewTool> viewMethods = new ObservableCollection<AbstractInfoViewTool>()
+        {
+            new CompareViewTool(),
+            new RotationIncreaseViewTool()
+        };
+
+        public ObservableCollection<AbstractInfoViewTool> ViewMethods
+        {
+            get => viewMethods;
         }
 
         private ObservableCollection<ImageProcessor> _imageProcessors = new ObservableCollection<ImageProcessor>()
@@ -58,11 +98,7 @@ namespace ImageResearchNew.ViewModel
         public ObservableCollection<ImageProcessor> ImageProcessors
         {
             get { return _imageProcessors; }
-            set
-            {
-                _imageProcessors = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _imageProcessors, value);
         }
 
         public DelegateCommand ProcessorValueChanged { get; }
@@ -72,44 +108,17 @@ namespace ImageResearchNew.ViewModel
         public DelegateCommand SelectedItemToolChanged { get; }
         public DelegateCommand ToolSummaryResult { get; }
         public DelegateCommand ScaleValueChanged { get; }
-
-        public ToolboxViewModel ToolBox
-        {
-            get
-            {
-                return _toolBox;
-            }
-
-            set
-            {
-                _toolBox = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsShowGrid
-        {
-            get
-            {
-                return _isShowGrid;
-            }
-
-            set
-            {
-                _isShowGrid = value;
-                OnPropertyChanged();
-            }
-        }
+        public DelegateCommand TriggerOscilloscope { get; }
 
         public ControllerViewModel()
         {
-            ProcessorValueChanged = new DelegateCommand(obj => OnProcessorValueChanged(obj), obj => Canvas != null);
-            ProcessorSelectedChanged = new DelegateCommand(obj => OnProcessorSelectedChanged(obj), obj => Canvas != null);
-            ShowGridCommand = new DelegateCommand(obj => ShowGrid(obj), obj => Canvas != null);
+            ProcessorValueChanged = new DelegateCommand(obj => OnProcessorValueChanged(obj), obj => FocusedCanvas != null);
+            ProcessorSelectedChanged = new DelegateCommand(obj => OnProcessorSelectedChanged(obj), obj => FocusedCanvas != null);
+            ShowGridCommand = new DelegateCommand(obj => ShowGrid(obj), obj => FocusedCanvas != null);
             OpenImageCommand = new DelegateCommand(obj => OpenImage());
             SelectedItemToolChanged = new DelegateCommand(obj => OnSelectedItemToolChanged(obj));
-            ToolSummaryResult = new DelegateCommand(obj => SummaryResult(), obj => Canvas != null);
-            ScaleValueChanged = new DelegateCommand(obj => OnScaleValueChanged(obj), obj => Canvas != null);
+            ToolSummaryResult = new DelegateCommand(obj => SummaryResult(), obj => FocusedCanvas != null);
+            TriggerOscilloscope = new DelegateCommand(obj => OpenOscilloscope());
 
             Settings.Instance.PropertyChanged += Instance_PropertyChanged;
 
@@ -120,7 +129,7 @@ namespace ImageResearchNew.ViewModel
         {
             if (e.PropertyName == "GridSize")
             {
-                var layer = Canvas.EditedImage.GetLayerBy("Grid");
+                var layer = FocusedCanvas.EditedImage.GetLayerBy("Grid");
 
                 if (layer != null)
                 {
@@ -129,31 +138,21 @@ namespace ImageResearchNew.ViewModel
             }
         }
 
+        private void OpenOscilloscope()
+        {
+            var window = new OscilloscopeWindow();
+            window.DataContext = new OscilloscopeViewModel();
+            window.Show();
+        }
+
         private void SummaryResult()
         {
-            var tool = Canvas.Toolbox.CurrentTool as IToolContainer;
+            var tool = FocusedCanvas.Toolbox.CurrentTool as IToolContainer;
 
             if (tool != null)
             {
-                tool.ShowResult(Canvas);
+                tool.ShowResult(FocusedCanvas);
             }
-        }
-
-        private int delta = 0;
-        private void OnScaleValueChanged(object obj)
-        {
-            //if (delta < _scaleValue)
-            //{
-            //    Canvas.Width++;
-            //    Canvas.Height++;
-            //}
-            //else
-            //{
-            //    Canvas.Width--;
-            //    Canvas.Height--;
-            //}
-            //delta = _scaleValue;
-
         }
 
         private void OnSelectedItemToolChanged(object obj)
@@ -162,7 +161,7 @@ namespace ImageResearchNew.ViewModel
 
             if (toolbox != null)
             {
-                toolbox.Tools.OfType<IToolContainer>().ToList().ForEach(s => s.Clear(Canvas));
+                toolbox.Tools.OfType<IToolContainer>().ToList().ForEach(s => s.Clear(FocusedCanvas));
             }
         }
 
@@ -179,22 +178,23 @@ namespace ImageResearchNew.ViewModel
                     return;
                 }
 
-                var canvas = new CanvasViewModel(image)
+                var focusedCanvas = new CanvasViewModel(image)
                 {
                     Toolbox = ToolBox
                 };
 
-                Canvas = canvas;
-                Canvas.EditedImage.AddLayer("Grid");
+                FocusedCanvas = focusedCanvas;
+                FocusedCanvas.EditedImage.AddLayer("Grid");
                 CreateGridImage();
-                Canvas.EditedImage.CurrentLayer.Visible = IsShowGrid;
+                FocusedCanvas.EditedImage.CurrentLayer.Visible = IsShowGrid;
+                CanvasList.Add(FocusedCanvas);
                 OnPropertyChanged(nameof(ControllerViewModel.ScaleValue));
             }
         }
 
         private void CreateGridImage()
         {
-            Canvas.EditedImage.CurrentLayer.Image = DrawHelper.DrawGrid(Canvas.EditedImage.CurrentLayer, Settings.Instance.GridSize);
+            FocusedCanvas.EditedImage.CurrentLayer.Image = DrawHelper.DrawGrid(FocusedCanvas.EditedImage.CurrentLayer, Settings.Instance.GridSize);
         }
 
         private void ShowGrid(object obj)
@@ -203,7 +203,7 @@ namespace ImageResearchNew.ViewModel
 
             if (state)
             {
-                var layer = Canvas.EditedImage.Layers.FirstOrDefault(s => s.Name == "Grid");
+                var layer = FocusedCanvas.EditedImage.Layers.FirstOrDefault(s => s.Name == "Grid");
 
                 if (layer != null)
                 {
@@ -212,8 +212,20 @@ namespace ImageResearchNew.ViewModel
             }
             else
             {
-                Canvas.EditedImage.Layers.FirstOrDefault(s => s.Name == "Grid").Visible = false;
+                FocusedCanvas.EditedImage.Layers.FirstOrDefault(s => s.Name == "Grid").Visible = false;
             }
+        }
+
+        public void OnViewMethodIsSelected(object selectedItem)
+        {
+            var viewMethod = selectedItem as AbstractInfoViewTool;
+
+            //viewMethod.OpenCompareWindow((IList<object>)SelectedImagesViews);
+
+            var window = new CompareWindow();
+            var obj = new DynamicGridViewModel(SelectedImagesViews);
+            window.DataContext = obj;
+            window.Show();
         }
 
         private void OnProcessorValueChanged(object obj)
@@ -222,7 +234,7 @@ namespace ImageResearchNew.ViewModel
 
             if (processor != null)
             {
-                processor.Process(Canvas.EditedImage);
+                processor.Process(FocusedCanvas.EditedImage);
             }
 
             Console.WriteLine("Value: " + obj);
@@ -234,7 +246,7 @@ namespace ImageResearchNew.ViewModel
 
             if (processor != null)
             {
-                processor.Process(Canvas.EditedImage);
+                processor.Process(FocusedCanvas.EditedImage);
             }
 
             Console.WriteLine("Selection: " + obj);

@@ -8,5 +8,8 @@ namespace ImageResearchNew.ViewImageTools
 {
     public abstract class AbstractInfoViewTool
     {
+        public abstract string Name { get; }
+
+        public abstract void OpenCompareWindow(IList<object> imagesViews);
     }
 }
