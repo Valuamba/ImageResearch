@@ -31,7 +31,7 @@ namespace ImageResearchNew.ViewModel
         public ObservableCollection<ICellViewModel> SelectedImagesViews
         {
             get => selectedImagesViews;
-            set { SetProperty(ref selectedImagesViews, value);  }
+            set { SetProperty(ref selectedImagesViews, value); }
         }
 
         public ObservableCollection<ObservableCollection<CanvasViewModel>> GridCanvasList
@@ -43,7 +43,7 @@ namespace ImageResearchNew.ViewModel
         public int ScaleValue
         {
             get => FocusedCanvas != null
-                ? (int) (FocusedCanvas.Width * FocusedCanvas.Height)
+                ? (int)(FocusedCanvas.Width * FocusedCanvas.Height)
                 : 0;
             set
             {
@@ -82,6 +82,8 @@ namespace ImageResearchNew.ViewModel
             get => viewMethods;
         }
 
+        #region ProcessorsViewModel
+
         private ObservableCollection<ImageProcessor> _imageProcessors = new ObservableCollection<ImageProcessor>()
         {
             new FormatProcessor(
@@ -103,6 +105,33 @@ namespace ImageResearchNew.ViewModel
 
         public DelegateCommand ProcessorValueChanged { get; }
         public DelegateCommand ProcessorSelectedChanged { get; }
+
+        private void OnProcessorValueChanged(object obj)
+        {
+            var processor = obj as ImageProcessor;
+
+            if (processor != null)
+            {
+                processor.Process(FocusedCanvas.EditedImage);
+            }
+
+            Console.WriteLine("Value: " + obj);
+        }
+
+        public void OnProcessorSelectedChanged(object obj)
+        {
+            var processor = obj as ImageProcessor;
+
+            if (processor != null)
+            {
+                processor.Process(FocusedCanvas.EditedImage);
+            }
+
+            Console.WriteLine("Selection: " + obj);
+        }
+        #endregion
+
+
         public DelegateCommand ShowGridCommand { get; }
         public DelegateCommand OpenImageCommand { get; }
         public DelegateCommand SelectedItemToolChanged { get; }
@@ -141,7 +170,7 @@ namespace ImageResearchNew.ViewModel
         private void OpenOscilloscope()
         {
             var window = new OscilloscopeWindow();
-            window.DataContext = new OscilloscopeViewModel();
+            window.DataContext = new OscilloscopeViewModel(FocusedCanvas.EditedImage);
             window.Show();
         }
 
@@ -226,30 +255,6 @@ namespace ImageResearchNew.ViewModel
             var obj = new DynamicGridViewModel(SelectedImagesViews);
             window.DataContext = obj;
             window.Show();
-        }
-
-        private void OnProcessorValueChanged(object obj)
-        {
-            var processor = obj as ImageProcessor;
-
-            if (processor != null)
-            {
-                processor.Process(FocusedCanvas.EditedImage);
-            }
-
-            Console.WriteLine("Value: " + obj);
-        }
-
-        public void OnProcessorSelectedChanged(object obj)
-        {
-            var processor = obj as ImageProcessor;
-
-            if (processor != null)
-            {
-                processor.Process(FocusedCanvas.EditedImage);
-            }
-
-            Console.WriteLine("Selection: " + obj);
         }
     }
 }

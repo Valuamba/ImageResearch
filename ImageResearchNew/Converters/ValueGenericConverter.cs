@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
@@ -21,6 +22,14 @@ namespace ImageResearchNew.Converters
 
 			ApplyParameter(parameter, culture, ref tResult);
 			return System.Convert.ChangeType(tResult, targetType);
+		}
+
+		public T ConvertTo<T>(object value)
+        {
+			var type = typeof(T);
+			return type == typeof(object) || type.IsPrimitive
+			? (T) System.Convert.ChangeType(value, type)
+			: (T) TypeDescriptor.GetConverter(type).ConvertFrom(value);
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
