@@ -77,7 +77,7 @@ namespace ImageResearchNew.Helpers
         private static EditedImage LoadBitmap(FileInfo file)
         {
             var sourceImage = (Bitmap)Image.FromFile(file.FullName);
-            var image = new EditedImage(sourceImage);
+            var image = new EditedImage(sourceImage, file.Name);
             var bitmap = BitmapSourceFromBitmap(sourceImage);
 
             //var bitmap = new BitmapImage(new Uri(file.FullName));

@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace ImageResearchNew.ViewModel
 {
-    public class CanvasViewModel : BindableObjectBase
+    public class CanvasViewModel : BindableObjectBase, ICanvasViewModel, ICellViewModel
     {
         private ToolboxViewModel _toolbox = null;
 
@@ -53,6 +53,8 @@ namespace ImageResearchNew.ViewModel
             get { return _toolbox; }
             set { _toolbox = value; }
         }
+
+        public ICell Cell { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public CanvasViewModel(EditedImage editedImage)
         {

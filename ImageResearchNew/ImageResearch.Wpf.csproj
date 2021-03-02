@@ -8,12 +8,13 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>ImageResearchNew</RootNamespace>
     <AssemblyName>ImageResearchNew</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,9 +36,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ikc5.TypeLibrary, Version=1.0.0.10, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ikc5.TypeLibrary.1.0.0.10\lib\net451\Ikc5.TypeLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Common, Version=4.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.5.0.1\lib\net461\System.Drawing.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -60,11 +73,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppWindows\CompareWindow.xaml.cs">
+      <DependentUpon>CompareWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AppWindows\GraphWindow.xaml.cs">
       <DependentUpon>GraphWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppWindows\ImageViewWindow.xaml.cs">
       <DependentUpon>ImageViewWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AppWindows\OscilloscopeWindow.xaml.cs">
+      <DependentUpon>OscilloscopeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AppWindows\PixelsWindow.xaml.cs">
       <DependentUpon>PixelsWindow.xaml</DependentUpon>
@@ -81,17 +100,33 @@
     <Compile Include="Classes\Pixel.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\ValueImageProcessor.cs" />
+    <Compile Include="Converters\BaseGenericConverter.cs" />
+    <Compile Include="Converters\ColorToBrushConverter.cs" />
+    <Compile Include="Converters\DecreaseDoubleConverter.cs" />
+    <Compile Include="Converters\DivideDoubleConverter.cs" />
+    <Compile Include="Converters\MaxValueOfArrayConverter.cs" />
+    <Compile Include="Converters\OperationGenericConverter.cs" />
+    <Compile Include="Converters\ValueGenericConverter.cs" />
+    <Compile Include="CustomControls\LabelHeaderItem.cs" />
+    <Compile Include="CustomControls\LabelHeaderList.cs" />
     <Compile Include="Helpers\DialogHelper.cs" />
     <Compile Include="Helpers\DrawHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\UnhandledException.cs" />
+    <Compile Include="ImageCharts\HistogramChart.cs" />
+    <Compile Include="ImageCharts\IChart.cs" />
+    <Compile Include="ImageCharts\OscillogramChart.cs" />
+    <Compile Include="ImageCharts\SpectrogramChart.cs" />
+    <Compile Include="ImageCharts\VectoroscopeChart.cs" />
     <Compile Include="ImageProcessing\BrightnessProcessor.cs" />
     <Compile Include="ImageProcessing\ContrastProcessor.cs" />
     <Compile Include="ImageProcessing\FormatProcessor.cs" />
     <Compile Include="ImageProcessing\RGBProcessor.cs" />
     <Compile Include="ImageProcessing\SubsamplingRateProcessor.cs" />
     <Compile Include="ImageProcessing\YUVProcessor.cs" />
+    <Compile Include="Model\Cell.cs" />
     <Compile Include="Model\EditedImage.cs" />
+    <Compile Include="Model\ICell.cs" />
     <Compile Include="Model\ImageLayer.cs" />
     <Compile Include="Tools\AbstractInfoTool.cs" />
     <Compile Include="Tools\ContiguityTool.cs" />
@@ -100,21 +135,37 @@
     <Compile Include="Tools\RegionsTool.cs" />
     <Compile Include="Tools\RegionTool.cs" />
     <Compile Include="Tools\StandartTool.cs" />
+    <Compile Include="Utilities\CollectionExtensions.cs" />
     <Compile Include="ViewImageTools\AbstractInfoViewTool.cs" />
     <Compile Include="ViewImageTools\CompareViewTool.cs" />
     <Compile Include="ViewImageTools\IViewCallback.cs" />
     <Compile Include="ViewImageTools\RotationIncreaseViewTool.cs" />
     <Compile Include="ViewImageTools\SingleViewTool.cs" />
     <Compile Include="ViewModel\CanvasViewModel.cs" />
+    <Compile Include="ViewModel\CellViewModel.cs" />
     <Compile Include="ViewModel\ControllerViewModel.cs" />
     <Compile Include="ViewModel\DelegateCommand.cs" />
+    <Compile Include="ViewModel\DynamicGridViewModel.cs" />
+    <Compile Include="ViewModel\HistogramChartViewModel.cs" />
     <Compile Include="ViewModel\ICanvasCallback.cs" />
+    <Compile Include="ViewModel\ICanvasViewModel.cs" />
+    <Compile Include="ViewModel\ICellViewModel.cs" />
+    <Compile Include="ViewModel\IDynamicGridViewModel.cs" />
+    <Compile Include="ViewModel\IOscilloscopeViewModel.cs" />
+    <Compile Include="ViewModel\IProcessorsViewModel.cs" />
     <Compile Include="ViewModel\IToolContainer.cs" />
     <Compile Include="ViewModel\IToolInformation.cs" />
+    <Compile Include="ViewModel\OscilloscopeViewModel.cs" />
     <Compile Include="ViewModel\ProcessorsViewModel.cs" />
     <Compile Include="ViewModel\ToolboxViewModel.cs" />
     <Compile Include="View\CanvasView.xaml.cs">
       <DependentUpon>CanvasView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CellView.xaml.cs">
+      <DependentUpon>CellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DynamicGridView.xaml.cs">
+      <DependentUpon>DynamicGridView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ProcessorsView.xaml.cs">
       <DependentUpon>ProcessorsView.xaml</DependentUpon>
@@ -122,11 +173,19 @@
     <Compile Include="View\ToolboxView.xaml.cs">
       <DependentUpon>ToolboxView.xaml</DependentUpon>
     </Compile>
+    <Page Include="AppWindows\CompareWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AppWindows\GraphWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AppWindows\ImageViewWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AppWindows\OscilloscopeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,7 +209,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ResourceDictionary\LabelHeaderItemStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\CanvasView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CellView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DynamicGridView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -181,6 +256,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -201,6 +277,11 @@
   <ItemGroup>
     <Resource Include="Images\click.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ImageResearch.Engine\ImageResearch.Engine.csproj">
+      <Project>{6a2574bd-d050-4897-834e-9b35246bb3a6}</Project>
+      <Name>ImageResearch.Engine</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,18 +7,32 @@
         xmlns:dvc="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
         mc:Ignorable="d"
         Style="{StaticResource CustomWindow}"
-        Title="График пикселей" Height="450" Width="800" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="График пикселей"
+        Height="450"
+        Width="800"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
     <Window.Resources>
         <DataTemplate x:Key="ButtonDataTemplate">
-            <Button AutomationProperties.AutomationId="{Binding Path=Name, StringFormat='{}{0}Button'}" Foreground="White" Content="{Binding Name}" Width="50" Height="30" FontWeight="Bold" Click="Button_Click">
+            <Button AutomationProperties.AutomationId="{Binding Path=Name, StringFormat='{}{0}Button'}"
+                    Foreground="White"
+                    Content="{Binding Name}"
+                    Width="50"
+                    Height="30"
+                    FontWeight="Bold"
+                    Click="Button_Click">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=IsSelected}" Value="True">
-                                <Setter Property="Background" Value="Green" />
+                            <DataTrigger Binding="{Binding Path=IsSelected}"
+                                         Value="True">
+                                <Setter Property="Background"
+                                        Value="Green" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding Path=IsSelected}" Value="False">
-                                <Setter Property="Background" Value="Red" />
+                            <DataTrigger Binding="{Binding Path=IsSelected}"
+                                         Value="False">
+                                <Setter Property="Background"
+                                        Value="Red" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -34,14 +48,21 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <WindowsFormsHost Grid.Row="0" AutomationProperties.AutomationId="GraphChart">
-            <dvc:Chart x:Name="Chart" GetToolTipText="Chart_GetToolTipText"/>
+        <WindowsFormsHost Grid.Row="0"
+                          AutomationProperties.AutomationId="GraphChart">
+            <dvc:Chart x:Name="Chart"
+                       GetToolTipText="Chart_GetToolTipText" />
         </WindowsFormsHost>
 
-        <ItemsControl AutomationProperties.AutomationId="ButtonsItemsControl" HorizontalAlignment="Center" Grid.Row="2" ItemsSource="{Binding Buttons}" Margin="2" ItemTemplate="{StaticResource ButtonDataTemplate}">
+        <ItemsControl AutomationProperties.AutomationId="ButtonsItemsControl"
+                      HorizontalAlignment="Center"
+                      Grid.Row="2"
+                      ItemsSource="{Binding Buttons}"
+                      Margin="2"
+                      ItemTemplate="{StaticResource ButtonDataTemplate}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <WrapPanel IsItemsHost="True"/>
+                    <WrapPanel IsItemsHost="True" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
